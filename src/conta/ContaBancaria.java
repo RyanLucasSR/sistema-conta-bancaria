@@ -1,16 +1,23 @@
 package conta;
 
+import java.util.Objects;
+
 public class ContaBancaria {
 
     private String titular;
-    private double saldo = 0;
-    private int numeroConta;
+    private double saldo;
+    private int id;
+
+    public ContaBancaria(String titular, int numeroConta){
+        setTitular(titular);
+        setId(numeroConta);
+    }
 
     public String getTitular() {
         return titular;
     }
 
-    public void setTitular(String titular) {
+    private void setTitular(String titular) {
         if(titular.length() >= 3) {
             this.titular = titular;
         }
@@ -26,18 +33,18 @@ public class ContaBancaria {
         }
     }
 
-    public int getNumeroConta() {
-        return numeroConta;
+    public int getId() {
+        return id;
     }
 
-    public void setNumeroConta(int numeroConta) {
-        if (numeroConta > 0) {
-            this.numeroConta = numeroConta;
+    private void setId(int id) {
+        if (id >= 0) {
+            this.id = id;
         }
     }
 
     public void depositar(double valor) {
-        if (valor > 0) {
+        if (valor >= 0) {
             setSaldo(getSaldo() + valor);
             System.out.println("Depositado com sucesso!");
         }else {
@@ -45,26 +52,37 @@ public class ContaBancaria {
         }
     }
 
-    public void sacar(double valor){
-        if(valor <= getSaldo() && valor > 0){
-            setSaldo(getSaldo() - valor);
-            System.out.println("Sacado com sucesso!");
-        }else{
-            System.out.println("Saldo insuficiente!");
+    public void sacar(double valor) {
+        if (valor < 0){
+            throw new IllegalArgumentException("Valor invalido!");
         }
-    }
+        if(valor > getSaldo()){
+            throw new IllegalArgumentException("Saldo insuficiente!");
+        }
 
-    public String exibirSaldo(){
-            return "Titular: " + getTitular() + "\nSaldo: " + getSaldo();
+        setSaldo(getSaldo() - valor);
+        System.out.println("Saque realizado com sucesso!");
     }
 
     public void transferir(double valor, ContaBancaria outraConta){
         if(valor <= getSaldo()) {
-            setSaldo(getSaldo() - valor);
-            outraConta.depositar(valor);
-            System.out.println("Transferencia com sucesso!");
-        }else{
-            System.out.println("Saldo insuficiente!");
+           throw new IllegalArgumentException("Saldo insuficiente!");
         }
+
+        setSaldo(getSaldo() - valor);
+        outraConta.depositar(valor);
+        System.out.println("Transferencia com sucesso!");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ContaBancaria that = (ContaBancaria) o;
+        return Double.compare(saldo, that.saldo) == 0 && id == that.id && Objects.equals(titular, that.titular);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(titular, saldo, id);
     }
 }

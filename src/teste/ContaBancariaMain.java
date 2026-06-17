@@ -1,31 +1,41 @@
 package teste;
 
-import conta.ContaPoupanca;
+import conta.gerenciamentoDeContas.Contas;
+import conta.menu.Menu;
+
+import java.util.Scanner;
 
 public class ContaBancariaMain {
 
     public static void main(String[] args) {
 
-        ContaPoupanca c1 = new ContaPoupanca("Ryan", 15);
+        Scanner entrada = new Scanner(System.in);
+        Contas conta = new Contas();
+        Menu menu = new Menu();
 
-        System.out.println(c1.exibirSaldo());
-        c1.depositar(100);
-        System.out.println(c1.exibirSaldo());
-        c1.sacar(200);
-        System.out.println(c1.exibirSaldo());
-        c1.sacar(50);
-        System.out.println(c1.exibirSaldo());
-        c1.renderJuros();
-        System.out.println(c1.exibirSaldo());
+        int escolha = 0;
+        do {
+            System.out.println(menu.exibirMenu());
+            escolha = entrada.nextInt();
 
-        ContaPoupanca c2 = new ContaPoupanca("Lucas", 14);
+            switch (escolha) {
+                case 1:
+                    System.out.println("Digite seu nome:");
+                    String nome = entrada.nextLine();
+                    System.out.println("Digite seu ID");
+                    int id = entrada.nextInt();
+                    conta.adicionarConta(nome, id);
+                    break;
+                case 2:
+                    System.out.println("Digite seu Id");
+                    int idConta = entrada.nextInt();
+                    conta.pesquisarConta(idConta);
+                    break;
+                case 3:
+                    conta.listarContas();
+                    break;
+            }
 
-        System.out.println(c2.exibirSaldo());
-        c1.transferir(20, c2);
-        System.out.println(c2.exibirSaldo());
-        System.out.println(c1.exibirSaldo());
-
-        c2.renderJuros();
-        System.out.println(c2.exibirSaldo());
+        }while(escolha != 0 && escolha <= 8);
     }
 }
