@@ -1,16 +1,19 @@
-package conta;
+package model;
+
+import exception.SaldoInsuficienteException;
+import exception.ValorInvalidoException;
 
 import java.util.Objects;
 
-public class ContaBancaria {
+public class Conta {
 
     private String titular;
     private double saldo;
     private int id;
 
-    public ContaBancaria(String titular, int numeroConta){
+    public Conta(String titular, int id){
         setTitular(titular);
-        setId(numeroConta);
+        setId(id);
     }
 
     public String getTitular() {
@@ -18,7 +21,7 @@ public class ContaBancaria {
     }
 
     private void setTitular(String titular) {
-        if(titular.length() >= 3) {
+        if(titular != null && titular.trim().length() >= 3) {
             this.titular = titular;
         }
     }
@@ -28,8 +31,10 @@ public class ContaBancaria {
     }
 
     private void setSaldo(double saldo) {
-        if (saldo >= 0) {
+        if (saldo > 0) {
             this.saldo = saldo;
+        }else{
+            throw new SaldoInsuficienteException();
         }
     }
 
@@ -38,7 +43,7 @@ public class ContaBancaria {
     }
 
     private void setId(int id) {
-        if (id >= 0) {
+        if (id > 0) {
             this.id = id;
         }
     }
@@ -46,38 +51,37 @@ public class ContaBancaria {
     public void depositar(double valor) {
         if (valor >= 0) {
             setSaldo(getSaldo() + valor);
-            System.out.println("Depositado com sucesso!");
         }else {
-            System.out.println("Deposito invalido!");
+            throw new ValorInvalidoException();
         }
     }
 
     public void sacar(double valor) {
         if (valor < 0){
-            throw new IllegalArgumentException("Valor invalido!");
+            throw new ValorInvalidoException();
         }
         if(valor > getSaldo()){
-            throw new IllegalArgumentException("Saldo insuficiente!");
+            throw new SaldoInsuficienteException();
         }
 
         setSaldo(getSaldo() - valor);
-        System.out.println("Saque realizado com sucesso!");
     }
 
-    public void transferir(double valor, ContaBancaria outraConta){
-        if(valor <= getSaldo()) {
-           throw new IllegalArgumentException("Saldo insuficiente!");
+    public void transferir(double valor, Conta outraConta){
+        if(valor > getSaldo()) {
+           throw new SaldoInsuficienteException();
+        }else if(valor < 0){
+            throw new ValorInvalidoException();
         }
 
-        setSaldo(getSaldo() - valor);
+        sacar(valor);
         outraConta.depositar(valor);
-        System.out.println("Transferencia com sucesso!");
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ContaBancaria that = (ContaBancaria) o;
+        Conta that = (Conta) o;
         return Double.compare(saldo, that.saldo) == 0 && id == that.id && Objects.equals(titular, that.titular);
     }
 

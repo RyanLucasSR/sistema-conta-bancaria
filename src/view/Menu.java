@@ -1,4 +1,4 @@
-package conta.menu;
+package view;
 
 public class Menu {
 
