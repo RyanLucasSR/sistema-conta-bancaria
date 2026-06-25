@@ -38,7 +38,7 @@ public class Contas {
 
             }
         }catch(ValorInvalidoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class Contas {
             conta.sacar(valor);
             System.out.println("Valor sacado!");
         }catch (ValorInvalidoException | SaldoInsuficienteException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class Contas {
             contaOrigem.transferir(valor, contaDestino);
             System.out.println("Valor transferido!");
         }catch (SaldoInsuficienteException | ValorInvalidoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class Contas {
             conta.renderJuros(valor);
             System.out.println("Rendimento com sucesso!");
         }catch (SaldoInsuficienteException | ValorInvalidoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
 }

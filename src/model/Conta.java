@@ -31,7 +31,7 @@ public class Conta {
     }
 
     private void setSaldo(double saldo) {
-        if (saldo > 0) {
+        if (saldo >= 0) {
             this.saldo = saldo;
         }else{
             throw new SaldoInsuficienteException();
@@ -68,7 +68,7 @@ public class Conta {
     }
 
     public void transferir(double valor, Conta outraConta){
-        if(valor > getSaldo()) {
+        if(valor >= getSaldo()) {
            throw new SaldoInsuficienteException();
         }else if(valor < 0){
             throw new ValorInvalidoException();
